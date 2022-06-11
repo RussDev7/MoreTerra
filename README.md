@@ -1,4 +1,4 @@
-# MoreTerra - Basic 1.4 Support Edit
+# MoreTerra - Basic 1.4 Support
 
 ## What is this?
 This program will allow you to create a full view of your Terraria world. It's possible to highlight elements like Chests, Shadow Orbs, Heart Stones, as well as ores like Gold, Diamond, and many more.
