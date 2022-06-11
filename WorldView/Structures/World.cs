@@ -48,8 +48,12 @@ namespace MoreTerra.Structures
 
 		int[] sectionPointers;
 
+		private int version;
+
 		// List generated from reading in chest tiles.
 		private Dictionary<Point, ChestType> chestTypeList;
+
+		public static Point SpawnpointGlobal;
 
 		#region Structures
 		// Helper structure for storing information for tile scanning.
@@ -270,8 +274,7 @@ namespace MoreTerra.Structures
 
 		private void ReadHeader()
 		{
-
-			int version = reader.ReadInt32();
+			version = reader.ReadInt32();
 			if (version < 94)
 				throw new Exception("Must use version 1.2.3.1 or higher!");
 
@@ -325,11 +328,11 @@ namespace MoreTerra.Structures
 			header.sectionPointers = sectionPointers;
 			header.ReleaseNumber = version;
 			header.Name = reader.ReadString();
-            reader.ReadString();
-            var genVersion = reader.ReadUInt64();
-           var headerId = new Guid(reader.ReadBytes(16));
-            reader.ReadInt32();
-            x = reader.ReadInt32();
+			reader.ReadString();
+			var genVersion = reader.ReadUInt64();
+			var headerId = new Guid(reader.ReadBytes(16));
+			reader.ReadInt32();
+			x = reader.ReadInt32();
 			w = reader.ReadInt32();
 			y = reader.ReadInt32();
 			h = reader.ReadInt32();
@@ -352,9 +355,14 @@ namespace MoreTerra.Structures
 			if (version >= 141)
 				creationTime = DateTime.FromBinary(reader.ReadInt64());
 
-           
+			// 1.4 World Headers
+			if (version >= 222) { header.DrunkWorld = reader.ReadBoolean(); }
+			if (version >= 227) { header.GoodWorld = reader.ReadBoolean(); }
+			if (version >= 238) { header.TenthAnniversaryWorld = reader.ReadBoolean(); }
+			if (version >= 239) { header.DontStarveWorld = reader.ReadBoolean(); }
+			if (version >= 241) { header.NotTheBeesWorld = reader.ReadBoolean(); }
 
-            header.TreeX = new int[3];
+			header.TreeX = new int[3];
 			header.TreeStyle = new int[4];
 			header.CaveBackX = new int[3];
 			header.CaveBackStyle = new int[4];
@@ -379,6 +387,12 @@ namespace MoreTerra.Structures
 			header.IceBackStyle = reader.ReadInt32();
 			header.JungleBackStyle = reader.ReadInt32();
 			header.HellBackStyle = reader.ReadInt32();
+
+			// 1.4 Fix
+			if (version > 194)
+			{
+				reader.BaseStream.Position = 311;
+			}
 
 			header.SpawnPoint = new Point(reader.ReadInt32(), reader.ReadInt32());
 			header.SurfaceLevel = reader.ReadDouble();
@@ -451,9 +465,13 @@ namespace MoreTerra.Structures
 				header.CloudsActive = reader.ReadInt32();
 				header.NumClouds = reader.ReadInt16();
 				header.WindSpeed = reader.ReadSingle();
+
+
 				List<string> anglerWhoFinishedToday = new List<string>();
 				for (int index = reader.ReadInt32(); index > 0; --index)
-					anglerWhoFinishedToday.Add(reader.ReadString());
+				{
+					//anglerWhoFinishedToday.Add(reader.ReadString());
+				}
 				if (version < 99)
 					return;
 				var savedAngler = reader.ReadBoolean();
@@ -461,10 +479,17 @@ namespace MoreTerra.Structures
 					return;
 				var anglerQuest = reader.ReadInt32();
 
+
+
 				//Saved Stylist
 				reader.ReadBoolean();
 				//Saved Tax Collector
 				reader.ReadBoolean();
+
+				if (version >= 201)
+				{
+					header.SavedGolfer = reader.ReadBoolean();
+				}
 
 				//Inavsion Size Start
 				reader.ReadInt32();
@@ -536,32 +561,119 @@ namespace MoreTerra.Structures
 				// Lunar Apolocyplse is up
 				reader.ReadBoolean();
 
-               reader.ReadBoolean();
-               reader.ReadBoolean();
-               reader.ReadInt32();
-                int num2 = reader.ReadInt32();
+				reader.ReadBoolean();
+				reader.ReadBoolean();
+				reader.ReadInt32();
+				int num2 = reader.ReadInt32();
 
-                for (int index = 0; index < num2; ++index)
-                    reader.ReadInt32();
+				for (int index = 0; index < num2; ++index)
+					reader.ReadInt32();
 
-               reader.ReadBoolean();
-               reader.ReadInt32();
-               reader.ReadSingle();
-               reader.ReadSingle();
+				reader.ReadBoolean();
+				reader.ReadInt32();
+				reader.ReadSingle();
+				reader.ReadSingle();
 
-                //DD2
-                //NPC.savedBartender = 
-                reader.ReadBoolean();
-                //DD2Event.DownedInvasionT1 = 
-                reader.ReadBoolean();
-                //DD2Event.DownedInvasionT2 = 
-                reader.ReadBoolean();
-                //DD2Event.DownedInvasionT3 = 
-                reader.ReadBoolean();
+				//DD2
+				//NPC.savedBartender = 
+				reader.ReadBoolean();
+				//DD2Event.DownedInvasionT1 = 
+				reader.ReadBoolean();
+				//DD2Event.DownedInvasionT2 = 
+				reader.ReadBoolean();
+				//DD2Event.DownedInvasionT3 = 
+				reader.ReadBoolean();
 
-            }
+				// 1.4 Journey's End
+				if (version > 194)
+				{
+					header.MushroomBg = reader.ReadByte();
+				}
 
+				if (version >= 215)
+				{
+					header.UnderworldBg = reader.ReadByte();
+				}
 
+				if (version >= 195)
+				{
+					header.BgTree2 = reader.ReadByte();
+					header.BgTree3 = reader.ReadByte();
+					header.BgTree4 = reader.ReadByte();
+				}
+
+				if (version >= 204)
+				{
+					header.CombatBookUsed = reader.ReadBoolean();
+				}
+
+				if (version >= 207)
+				{
+					header.TempLanternNightCooldown = reader.ReadInt32();
+					header.TempLanternNightGenuine = reader.ReadBoolean();
+					header.TempLanternNightManual = reader.ReadBoolean();
+					header.TempLanternNightNextNightIsGenuine = reader.ReadBoolean();
+				}
+
+				// tree tops
+				if (version >= 211)
+				{
+					// header.TreeTopVariations[0] = reader.ReadInt32();
+					// header.TreeTopVariations[1] = reader.ReadInt32();
+					// header.TreeTopVariations[2] = reader.ReadInt32();
+					// header.TreeTopVariations[3] = reader.ReadInt32();
+					// header.TreeTopVariations[4] = reader.ReadInt32();
+					// header.TreeTopVariations[5] = reader.ReadInt32();
+					// header.TreeTopVariations[6] = reader.ReadInt32();
+					// header.TreeTopVariations[7] = reader.ReadInt32();
+					// header.TreeTopVariations[8] = reader.ReadInt32();
+					// header.TreeTopVariations[9] = reader.ReadInt32();
+					// header.TreeTopVariations[10] = reader.ReadInt32();
+					// header.TreeTopVariations[11] = reader.ReadInt32();
+					// header.TreeTopVariations[12] = reader.ReadInt32();
+				}
+
+				if (version >= 212)
+				{
+					header.ForceHalloweenForToday = reader.ReadBoolean();
+					header.ForceXMasForToday = reader.ReadBoolean();
+				}
+
+				if (version >= 216)
+				{
+					header.SavedOreTiersCopper = reader.ReadInt32();
+					header.SavedOreTiersIron = reader.ReadInt32();
+					header.SavedOreTiersSilver = reader.ReadInt32();
+					header.SavedOreTiersGold = reader.ReadInt32();
+				}
+				else
+				{
+					header.SavedOreTiersCopper = -1;
+					header.SavedOreTiersIron = -1;
+					header.SavedOreTiersSilver = -1;
+					header.SavedOreTiersGold = -1;
+				}
+
+				if (version >= 217)
+				{
+					header.BoughtCat = reader.ReadBoolean();
+					header.BoughtDog = reader.ReadBoolean();
+					header.BoughtBunny = reader.ReadBoolean();
+				}
+
+				if (version >= 223)
+				{
+					header.DownedEmpressOfLight = reader.ReadBoolean();
+					header.DownedQueenSlime = reader.ReadBoolean();
+				}
+
+				if (version >= 240)
+				{
+					header.DownedDeerclops = reader.ReadBoolean();
+				}
+			}
+
+			// pos 1903
 			posTiles = stream.Position;
 			progressPosition = stream.Position;
 
@@ -650,10 +762,10 @@ namespace MoreTerra.Structures
 				bw.ReportProgress((Int32)(((Single)progressPosition / stream.Length) * readWorldPerc)
 					, "Reading Chests");
 
-
 			maxChests = reader.ReadInt16();
 			maxItems = reader.ReadInt16();
 
+			// System.Windows.Forms.MessageBox.Show(maxChests.ToString());
 
 			for (i = 0; i < maxChests; i++)
 			{
@@ -664,25 +776,35 @@ namespace MoreTerra.Structures
 
 				theChest.Coordinates = new Point(reader.ReadInt32(), reader.ReadInt32());
 
-				theChest.Name = reader.ReadString();
+				// Console.WriteLine(theChest.Coordinates.ToString());
 
+				theChest.Name = reader.ReadString();
 
 				if (chestTypeList != null)
 				{
+					// System.Windows.Forms.MessageBox.Show("");
 					if (chestTypeList.ContainsKey(theChest.Coordinates))
+					{
 						theChest.Type = chestTypeList[theChest.Coordinates];
+						//System.Windows.Forms.MessageBox.Show(theChest.Type.ToString());
+					}
 				}
 				else
 				{
 					theChest.Type = ChestType.Chest;
+					//System.Windows.Forms.MessageBox.Show(theChest.Type.ToString());
 				}
 
 				for (j = 0; j < maxItems; j++)
 				{
 					if (header.ReleaseNumber > 68)
+					{
 						itemCount = reader.ReadInt16();
+					}
 					else
+					{
 						itemCount = reader.ReadByte();
+					}
 
 					if (itemCount > 0)
 					{
@@ -693,10 +815,12 @@ namespace MoreTerra.Structures
 						if (header.ReleaseNumber >= 0x26)
 						{
 							theItem.Name = Global.Instance.Info.GetItemName(reader.ReadInt32());
+							// System.Windows.Forms.MessageBox.Show(theItem.Name.ToString());
 						}
 						else
 						{
 							theItem.Name = reader.ReadString();
+							//System.Windows.Forms.MessageBox.Show(theItem.Name.ToString());
 						}
 
 						if (header.ReleaseNumber >= 0x24)
@@ -707,8 +831,8 @@ namespace MoreTerra.Structures
 				}
 				chests.Add(theChest);
 
-
 				progressPosition = stream.Position;
+
 			}
 
 			posSigns = stream.Position;
@@ -716,6 +840,7 @@ namespace MoreTerra.Structures
 
 		private void ReadSigns()
 		{
+
 			Sign theSign;
 			signs = new List<Sign>(1000);
 
@@ -743,6 +868,7 @@ namespace MoreTerra.Structures
 			}
 
 			posNpcs = stream.Position;
+
 		}
 
 		private void ReadNPCs()
@@ -768,10 +894,10 @@ namespace MoreTerra.Structures
 
 				theNPC.Active = nextNPC;
 
-                theNPC.Type = (NPCType)reader.ReadInt32();
-                
+				theNPC.Type = (NPCType)reader.ReadInt32();
 
-    //            if (Enum.TryParse(reader.ReadString().Replace(" ", ""), true, out npcType))
+
+				//            if (Enum.TryParse(reader.ReadString().Replace(" ", ""), true, out npcType))
 				//	theNPC.Type = npcType;
 				//else
 				//	theNPC.Type = NPCType.Unknown;
@@ -791,6 +917,7 @@ namespace MoreTerra.Structures
 			}
 
 			posFooter = stream.Position;
+
 		}
 
 		private void ReadNPCNames()
@@ -845,6 +972,7 @@ namespace MoreTerra.Structures
 
 			posEnd = stream.Position;
 			progressPosition = stream.Position;
+
 		}
 
 		public int[,] ReadAndProcessWorld(String worldPath, BackgroundWorker worker)
@@ -855,244 +983,256 @@ namespace MoreTerra.Structures
 			Timer t = null;
 
 
-			try
+
+
+			if (worker != null)
 			{
+				bw = worker;
+				progressPosition = 0;
+				t = new Timer(333);
+				t.Elapsed += new ElapsedEventHandler(timer_ReadWorld);
+				t.Start();
+			}
 
-				if (worker != null)
-				{
-					bw = worker;
-					progressPosition = 0;
-					t = new Timer(333);
-					t.Elapsed += new ElapsedEventHandler(timer_ReadWorld);
-					t.Start();
-				}
-
-
-
-				if (SettingsManager.Instance.ShowChestTypes == true)
-					chestTypeList = new Dictionary<Point, ChestType>();
-				else
-					chestTypeList = null;
-
-				readWorldPerc = 45;
-
-				stream = new FileStream(worldPath, FileMode.Open, FileAccess.Read);
-				reader = new BinaryReader(stream, Encoding.Default);
-
-
-
-
-				ReadHeader();
-
-				MaxX = header.MaxTiles.X;
-				MaxY = header.MaxTiles.Y;
-
-				// Reset MapTile List
-				retTiles = new int[MaxX, MaxY];
-				// WorldFile wf = new WorldFile();
-
-				if (bw != null)
-					bw.ReportProgress(0, "Reading and Processing Tiles");
-
-				byte firstHeader, secondHeader, thirdHeader = 0;
-				int ntileType = TileProperties.BackgroundOffset;
-				//  reader.BaseStream.Seek(sectionPointers[1],SeekOrigin.Begin);
-				int run = 0;
+			if (SettingsManager.Instance.ShowChestTypes == true)
 				chestTypeList = new Dictionary<Point, ChestType>();
-				for (int ncolumn = 0; ncolumn < header.MaxTiles.X; ncolumn++)
+			else
+				chestTypeList = null;
+
+			readWorldPerc = 45;
+
+			stream = new FileStream(worldPath, FileMode.Open, FileAccess.Read);
+			reader = new BinaryReader(stream, Encoding.Default);
+
+
+
+
+			ReadHeader();
+			// System.Windows.Forms.MessageBox.Show(reader.BaseStream.Position.ToString());
+			// reader.BaseStream.Position += 1363;
+
+			MaxX = header.MaxTiles.X;
+			MaxY = header.MaxTiles.Y;
+
+			// Reset MapTile List
+			retTiles = new int[MaxX, MaxY];
+
+			// WorldFile wf = new WorldFile();
+
+			if (bw != null)
+				bw.ReportProgress(0, "Reading and Processing Tiles");
+
+			byte firstHeader, secondHeader, thirdHeader = 0;
+			int ntileType = TileProperties.BackgroundOffset;
+
+			// 1.4 Fix
+			if (version > 194)
+			{
+				reader.BaseStream.Seek(sectionPointers[1], SeekOrigin.Begin);
+			}
+
+			// System.Windows.Forms.MessageBox.Show(reader.BaseStream.Position.ToString());
+			// reader.BaseStream.Position += 1363;
+
+			int run = 0;
+			chestTypeList = new Dictionary<Point, ChestType>();
+			for (int ncolumn = 0; ncolumn < header.MaxTiles.X; ncolumn++)
+			{
+				for (int nrow = 0; nrow < header.MaxTiles.Y; nrow++)
 				{
-					for (int nrow = 0; nrow < header.MaxTiles.Y; nrow++)
+					if (run > 0)
 					{
-						if (run > 0)
-						{
-							retTiles[ncolumn, nrow] = ntileType;
-							run--;
-							continue;
-						}
-
-
-						if (nrow < header.SurfaceLevel)
-							ntileType = TileProperties.BackgroundOffset;
-						else if (nrow == header.SurfaceLevel)
-							ntileType = (Int16)(TileProperties.BackgroundOffset + 1); // Dirt Transition
-						else if (nrow < (header.RockLayer + 38))
-							ntileType = (Int16)(TileProperties.BackgroundOffset + 2); // Dirt
-						else if (nrow == (header.RockLayer + 38))
-							ntileType = (Int16)(TileProperties.BackgroundOffset + 4); // Rock Transition
-						else if (nrow < (header.MaxTiles.Y - 202))
-							ntileType = (Int16)(TileProperties.BackgroundOffset + 3); // Rock 
-						else if (nrow == (header.MaxTiles.Y - 202))
-							ntileType = (Int16)(TileProperties.BackgroundOffset + 6); // Underworld Transition
-						else
-							ntileType = (Int16)(TileProperties.BackgroundOffset + 5); // Underworld
-
-						secondHeader = 0;
-						thirdHeader = 0;
-
-						firstHeader = reader.ReadByte();
-						if ((firstHeader & 1) == 1)
-						{
-							secondHeader = reader.ReadByte();
-							if ((secondHeader & 1) == 1)
-								thirdHeader = reader.ReadByte();
-						}
-
-						if ((firstHeader & 2) == 2)
-						{
-							if ((firstHeader & 32) == 32)
-							{
-								byte num5 = reader.ReadByte();
-								ntileType = reader.ReadByte() << 8 | num5;
-							}
-							else
-								ntileType = reader.ReadByte();
-
-							if (tileImportant[ntileType])
-							{
-								var typeX = reader.ReadInt16();
-								var typeY = reader.ReadInt16();
-								if (ntileType == TileProperties.ExposedGems)
-								{
-									if (typeX == 0)
-										ntileType = TileProperties.Amethyst;
-									else if (typeX == 18)
-										ntileType = TileProperties.Topaz;
-									else if (typeX == 36)
-										ntileType = TileProperties.Sapphire;
-									else if (typeX == 54)
-										ntileType = TileProperties.Emerald;
-									else if (typeX == 72)
-										ntileType = TileProperties.Ruby;
-									else if (typeX == 90)
-										ntileType = TileProperties.Diamond;
-									else if (typeX == 108)
-										ntileType = TileProperties.ExposedGems;
-									// If it's 108 we keep it as ExposedGems so it get the Amber marker.
-								}
-								else if (ntileType == TileProperties.SmallDetritus)
-								{
-									if ((typeX % 36 == 0) && (typeY == 18))
-									{
-										int type = typeX / 36;
-
-										if (type == 16)
-											ntileType = TileProperties.CopperCache;
-										else if (type == 17)
-											ntileType = TileProperties.SilverCache;
-										else if (type == 18)
-											ntileType = TileProperties.GoldCache;
-										else if (type == 19)
-											ntileType = TileProperties.Amethyst;
-										else if (type == 20)
-											ntileType = TileProperties.Topaz;
-										else if (type == 21)
-											ntileType = TileProperties.Sapphire;
-										else if (type == 22)
-											ntileType = TileProperties.Emerald;
-										else if (type == 23)
-											ntileType = TileProperties.Ruby;
-										else if (type == 24)
-											ntileType = TileProperties.Diamond;
-									}
-								}
-								else if (ntileType == TileProperties.LargeDetritus)
-								{
-									if ((typeX % 54 == 0) && (typeY == 0))
-									{
-										int type = typeX / 54;
-
-										if (type == 16 || type == 17)
-											ntileType = TileProperties.CopperCache;
-										else if (type == 18 || type == 19)
-											ntileType = TileProperties.SilverCache;
-										else if (type == 20 || type == 21)
-											ntileType = TileProperties.GoldCache;
-									}
-								}
-								else if (ntileType == TileProperties.LargeDetritus2)
-								{
-									if ((typeX % 54 == 0) && (typeY == 0))
-									{
-										int type = typeX / 54;
-
-										if (type == 17)
-											ntileType = TileProperties.EnchantedSword;
-									}
-								}
-								if ((ntileType == TileProperties.Chest) && (typeX % 36 == 0) && (typeY == 0))
-								{
-									if ((typeX / 36) <= (Int32)ChestType.LockedFrozenChest)
-										chestTypeList.Add(new Point(ncolumn, nrow), (ChestType)(typeX / 36));
-									else
-										chestTypeList.Add(new Point(ncolumn, nrow), ChestType.Unknown);
-								}
-
-							}
-							if ((thirdHeader & 8) == 8)
-								reader.ReadByte();
-
-						}
-						if ((firstHeader & 4) == 4)
-						{
-							wallType = reader.ReadByte();
-							if (ntileType >= TileProperties.Unknown)
-								ntileType = (Int16)(wallType + TileProperties.WallOffset);
-							if ((thirdHeader & 16) == 16)
-								reader.ReadByte();
-						}
-						if ((firstHeader & 8) == 8)
-						{
-							ntileType = TileProperties.Water;
-							reader.ReadByte();
-
-						}
-						else if ((firstHeader & 16) == 16)
-						{
-							ntileType = TileProperties.Lava;
-							reader.ReadByte();
-
-						}
-
-						if ((firstHeader & 64) == 64)
-						{
-							run = reader.ReadByte();
-
-						}
-						if ((firstHeader & 128) == 128)
-							run = reader.ReadInt16();
-
-
-
 						retTiles[ncolumn, nrow] = ntileType;
+						run--;
+						continue;
+					}
+
+
+					if (nrow < header.SurfaceLevel)
+						ntileType = TileProperties.BackgroundOffset;
+					else if (nrow == header.SurfaceLevel)
+						ntileType = (Int16)(TileProperties.BackgroundOffset + 1); // Dirt Transition
+					else if (nrow < (header.RockLayer + 38))
+						ntileType = (Int16)(TileProperties.BackgroundOffset + 2); // Dirt
+					else if (nrow == (header.RockLayer + 38))
+						ntileType = (Int16)(TileProperties.BackgroundOffset + 4); // Rock Transition
+					else if (nrow < (header.MaxTiles.Y - 202))
+						ntileType = (Int16)(TileProperties.BackgroundOffset + 3); // Rock 
+					else if (nrow == (header.MaxTiles.Y - 202))
+						ntileType = (Int16)(TileProperties.BackgroundOffset + 6); // Underworld Transition
+					else
+						ntileType = (Int16)(TileProperties.BackgroundOffset + 5); // Underworld
+
+					secondHeader = 0;
+					thirdHeader = 0;
+
+					firstHeader = reader.ReadByte();
+					if ((firstHeader & 1) == 1)
+					{
+						secondHeader = reader.ReadByte();
+						if ((secondHeader & 1) == 1)
+							thirdHeader = reader.ReadByte();
+					}
+
+					if ((firstHeader & 2) == 2)
+					{
+						if ((firstHeader & 32) == 32)
+						{
+							byte num5 = reader.ReadByte();
+							ntileType = reader.ReadByte() << 8 | num5;
+						}
+						else
+							ntileType = reader.ReadByte();
+
+						if (tileImportant[ntileType])
+						{
+							var typeX = reader.ReadInt16();
+							var typeY = reader.ReadInt16();
+							if (ntileType == TileProperties.ExposedGems)
+							{
+								if (typeX == 0)
+									ntileType = TileProperties.Amethyst;
+								else if (typeX == 18)
+									ntileType = TileProperties.Topaz;
+								else if (typeX == 36)
+									ntileType = TileProperties.Sapphire;
+								else if (typeX == 54)
+									ntileType = TileProperties.Emerald;
+								else if (typeX == 72)
+									ntileType = TileProperties.Ruby;
+								else if (typeX == 90)
+									ntileType = TileProperties.Diamond;
+								else if (typeX == 108)
+									ntileType = TileProperties.ExposedGems;
+								// If it's 108 we keep it as ExposedGems so it get the Amber marker.
+							}
+							else if (ntileType == TileProperties.SmallDetritus)
+							{
+								if ((typeX % 36 == 0) && (typeY == 18))
+								{
+									int type = typeX / 36;
+
+									if (type == 16)
+										ntileType = TileProperties.CopperCache;
+									else if (type == 17)
+										ntileType = TileProperties.SilverCache;
+									else if (type == 18)
+										ntileType = TileProperties.GoldCache;
+									else if (type == 19)
+										ntileType = TileProperties.Amethyst;
+									else if (type == 20)
+										ntileType = TileProperties.Topaz;
+									else if (type == 21)
+										ntileType = TileProperties.Sapphire;
+									else if (type == 22)
+										ntileType = TileProperties.Emerald;
+									else if (type == 23)
+										ntileType = TileProperties.Ruby;
+									else if (type == 24)
+										ntileType = TileProperties.Diamond;
+								}
+							}
+							else if (ntileType == TileProperties.LargeDetritus)
+							{
+								if ((typeX % 54 == 0) && (typeY == 0))
+								{
+									int type = typeX / 54;
+
+									if (type == 16 || type == 17)
+										ntileType = TileProperties.CopperCache;
+									else if (type == 18 || type == 19)
+										ntileType = TileProperties.SilverCache;
+									else if (type == 20 || type == 21)
+										ntileType = TileProperties.GoldCache;
+								}
+							}
+							else if (ntileType == TileProperties.LargeDetritus2)
+							{
+								if ((typeX % 54 == 0) && (typeY == 0))
+								{
+									int type = typeX / 54;
+
+									if (type == 17)
+										ntileType = TileProperties.EnchantedSword;
+								}
+							}
+							if ((ntileType == TileProperties.Chest) && (typeX % 36 == 0) && (typeY == 0))
+							{
+								if ((typeX / 36) <= (Int32)ChestType.LockedFrozenChest)
+								{
+									chestTypeList.Add(new Point(ncolumn, nrow), (ChestType)(typeX / 36));
+								}
+								else
+								{
+									chestTypeList.Add(new Point(ncolumn, nrow), ChestType.Unknown);
+								}
+							}
+
+						}
+						if ((thirdHeader & 8) == 8)
+							reader.ReadByte();
+
+					}
+					if ((firstHeader & 4) == 4)
+					{
+						wallType = reader.ReadByte();
+						if (ntileType >= TileProperties.Unknown)
+							ntileType = (Int16)(wallType + TileProperties.WallOffset);
+						if ((thirdHeader & 16) == 16)
+							reader.ReadByte();
+					}
+					if ((firstHeader & 8) == 8)
+					{
+						ntileType = TileProperties.Water;
+						reader.ReadByte();
+
+					}
+					else if ((firstHeader & 16) == 16)
+					{
+						ntileType = TileProperties.Lava;
+						reader.ReadByte();
 
 					}
 
+					if ((firstHeader & 64) == 64)
+					{
+						run = reader.ReadByte();
+
+					}
+					if ((firstHeader & 128) == 128)
+						run = reader.ReadInt16();
+
+
+
+					retTiles[ncolumn, nrow] = ntileType;
+
 				}
 
-
-
-
-				//  reader.BaseStream.Seek(sectionPointers[2], SeekOrigin.Begin);
-				ReadChests();
-				ReadSigns();
-				ReadNPCs();
-				//ReadNPCNames();
-				ReadFooter();
-
 			}
-			catch (Exception e)
+
+			foreach (var point in chestTypeList)
 			{
-				if (bw != null)
-				{
-					t.Stop();
-					bw = null;
-				}
-
-				reader.Close();
-				retTiles = null;
-				throw e;
+				// Console.WriteLine(point.Key.ToString());
+				// System.Windows.Forms.MessageBox.Show(point.Key.ToString());
 			}
 
+
+
+			// reader.BaseStream.Seek(sectionPointers[0], SeekOrigin.Begin);
+
+
+			// System.Windows.Forms.MessageBox.Show(reader.BaseStream.Position.ToString());
+
+			// reader.BaseStream.Position += 42;
+
+			ReadChests();
+			ReadSigns();
+			ReadNPCs();
+			//ReadNPCNames();
+			ReadFooter();
+
+			// Save Public Flags
+			SpawnpointGlobal = header.SpawnPoint;
 
 			if (bw != null)
 			{
@@ -1374,7 +1514,7 @@ namespace MoreTerra.Structures
 			cEnum.MoveNext();
 			nextChest = cEnum.Current;
 
-			for (i = 0; i < 1000; i++)
+			for (i = 0; i < 8000; i++)
 			{
 				if (nextChest != null && i == nextChest.ChestId)
 				{

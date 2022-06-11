@@ -1,18 +1,18 @@
 ﻿namespace MoreTerra.Structures
 {
-    using System;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Runtime.InteropServices;
+	using System;
+	using System.ComponentModel;
+	using System.Drawing;
+	using System.Runtime.InteropServices;
 	using MoreTerra;
 
-    public struct WorldHeader
-    {
-        private int releaseNumber;
-        private string name;
-        private int id;
-        private Rect worldCoords;
-        private Point maxTiles;
+	public struct WorldHeader
+	{
+		private int releaseNumber;
+		private string name;
+		private int id;
+		private Rect worldCoords;
+		private Point maxTiles;
 		private byte moonType;
 		private int[] treeX;
 		private int[] treeStyle;
@@ -21,21 +21,21 @@
 		private int iceBackStyle;
 		private int jungleBackStyle;
 		private int hellBackStyle;
-        private Point spawnPoint;
-        private double surfaceLevel;
-        private double rockLayer;
-        private double temporaryTime;
-        private bool isDayTime;
-        private int moonPhase;
-        private bool isBloodMoon;
-        private bool isEclipse;
-        private Point dungeonPoint;
+		private Point spawnPoint;
+		private double surfaceLevel;
+		private double rockLayer;
+		private double temporaryTime;
+		private bool isDayTime;
+		private int moonPhase;
+		private bool isBloodMoon;
+		private bool isEclipse;
+		private Point dungeonPoint;
 		private bool crimson; // What is this?
-        private bool isBoss1Dead;
-        private bool isBoss2Dead;
-        private bool isBoss3Dead;
+		private bool isBoss1Dead;
+		private bool isBoss2Dead;
+		private bool isBoss3Dead;
 		private bool isQueenBeeDead;
-        private bool isMechBoss1Dead;
+		private bool isMechBoss1Dead;
 		private bool isMechBoss2Dead;
 		private bool isMechBoss3Dead;
 		private bool isMechBossAnyDead;
@@ -47,17 +47,17 @@
 		private bool isMechanicSaved;
 		private bool isGoblinArmyDefeated;
 		private bool isClownDefeated;
-        private bool isFrostDefeated;
-        private bool isPiratesDefeated;
-        private bool isShadowOrbSmashed;
-        private bool isMeteorSpawned;
-        private byte shadowOrbsSmashed;
+		private bool isFrostDefeated;
+		private bool isPiratesDefeated;
+		private bool isShadowOrbSmashed;
+		private bool isMeteorSpawned;
+		private byte shadowOrbsSmashed;
 		private int altarsDestroyed;
 		private bool hardMode;
-        private int invasionDelay;
-        private int invasionSize;
-        private int invasionType;
-        private double invasionPointX;
+		private int invasionDelay;
+		private int invasionSize;
+		private int invasionType;
+		private double invasionPointX;
 		private double slimeRainTime;
 		private int sundialCooldown;
 		private bool isRaining;
@@ -87,71 +87,101 @@
 		private String paintersName; // 227
 		private String witchdoctorsName; // 228
 		private String piratesName; // 229
-        private String stylistName;
+		private String stylistName;
 
-        public int[] sectionPointers;
+		private bool drunkWorld;
+		private bool goodWorld;
+		private bool tenthAnniversaryWorld;
+		private bool dontStarveWorld;
+		private bool notTheBeesWorld;
+		private bool savedGolfer;
+		private byte mushroomBg;
+		private byte underworldBg;
+		private byte bgTree2;
+		private byte bgTree3;
+		private byte bgTree4;
+		private bool combatBookUsed;
+		private int tempLanternNightCooldown;
+		private bool tempLanternNightGenuine;
+		private bool tempLanternNightManual;
+		private bool tempLanternNightNextNightIsGenuine;
+		private int[] treeTopVariations;
+		private bool forceHalloweenForToday;
+		private bool forceXMasForToday;
+		private int savedOreTiersCopper;
+		private int savedOreTiersIron;
+		private int savedOreTiersSilver;
+		private int savedOreTiersGold;
+		private bool boughtCat;
+		private bool boughtDog;
+		private bool boughtBunny;
+		private bool downedEmpressOfLight;
+		private bool downedQueenSlime;
+		private bool downedDeerclops;
 
-        [CategoryAttribute("General"), ReadOnlyAttribute(true)]
-        public int ReleaseNumber
-        {
-            get
-            {
-                return this.releaseNumber;
-            }
-            set
-            {
-                this.releaseNumber = value;
-            }
-        }
+		public int[] sectionPointers;
 
-        [CategoryAttribute("General"), ReadOnlyAttribute(true)]
-        public string Name
-        {
-            get
-            {
-                return this.name;
-            }
-            set
-            {
-                this.name = value;
-            }
-        }
+		[CategoryAttribute("General"), ReadOnlyAttribute(true)]
+		public int ReleaseNumber
+		{
+			get
+			{
+				return this.releaseNumber;
+			}
+			set
+			{
+				this.releaseNumber = value;
+			}
+		}
 
-        [CategoryAttribute("General"), ReadOnlyAttribute(true)]
-        public int Id
-        {
-            get
-            {
-                return this.id;
-            }
-            set
-            {
-                this.id = value;
-            }
-        }
+		[CategoryAttribute("General"), ReadOnlyAttribute(true)]
+		public string Name
+		{
+			get
+			{
+				return this.name;
+			}
+			set
+			{
+				this.name = value;
+			}
+		}
 
-        [CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
-        public Rect WorldCoords
-        {
-            get
-            {
-                return this.worldCoords;
-            }
-            set
-            {
-                this.worldCoords = value;
-            }
-        }
+		[CategoryAttribute("General"), ReadOnlyAttribute(true)]
+		public int Id
+		{
+			get
+			{
+				return this.id;
+			}
+			set
+			{
+				this.id = value;
+			}
+		}
 
-        [CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
-        public Point MaxTiles
-        {
-            get
-            {
-                return this.maxTiles;
-            }
-            set
-            {
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public Rect WorldCoords
+		{
+			get
+			{
+				return this.worldCoords;
+			}
+			set
+			{
+				this.worldCoords = value;
+			}
+		}
+
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public Point MaxTiles
+		{
+			get
+			{
+				return this.maxTiles;
+			}
+			set
+			{
 				// For some very odd reason the Y coord on the map is stored first.
 				// Maps are always longer than tall so we flip it if it's the other way around.
 				if (value.X < value.Y)
@@ -160,11 +190,360 @@
 					value.X = value.Y;
 					value.Y = t;
 				}
-                this.maxTiles = value;
-            }
-        }
+				this.maxTiles = value;
+			}
+		}
 
-        [CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public bool DrunkWorld
+		{
+			get
+			{
+				return this.drunkWorld;
+			}
+			set
+			{
+				this.drunkWorld = value;
+			}
+		}
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public bool GoodWorld
+		{
+			get
+			{
+				return this.goodWorld;
+			}
+			set
+			{
+				this.goodWorld = value;
+			}
+		}
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public bool TenthAnniversaryWorld
+		{
+			get
+			{
+				return this.tenthAnniversaryWorld;
+			}
+			set
+			{
+				this.tenthAnniversaryWorld = value;
+			}
+		}
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public bool DontStarveWorld
+		{
+			get
+			{
+				return this.dontStarveWorld;
+			}
+			set
+			{
+				this.dontStarveWorld = value;
+			}
+		}
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public bool NotTheBeesWorld
+		{
+			get
+			{
+				return this.notTheBeesWorld;
+			}
+			set
+			{
+				this.notTheBeesWorld = value;
+			}
+		}
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public bool SavedGolfer
+		{
+			get
+			{
+				return this.savedGolfer;
+			}
+			set
+			{
+				this.savedGolfer = value;
+			}
+		}
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public byte MushroomBg
+		{
+			get
+			{
+				return this.mushroomBg;
+			}
+			set
+			{
+				this.mushroomBg = value;
+			}
+		}
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public byte UnderworldBg
+		{
+			get
+			{
+				return this.underworldBg;
+			}
+			set
+			{
+				this.underworldBg = value;
+			}
+		}
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public byte BgTree2
+		{
+			get
+			{
+				return this.bgTree2;
+			}
+			set
+			{
+				this.bgTree2 = value;
+			}
+		}
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public byte BgTree3
+		{
+			get
+			{
+				return this.bgTree3;
+			}
+			set
+			{
+				this.bgTree3 = value;
+			}
+		}
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public byte BgTree4
+		{
+			get
+			{
+				return this.bgTree4;
+			}
+			set
+			{
+				this.bgTree4 = value;
+			}
+		}
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public bool CombatBookUsed
+		{
+			get
+			{
+				return this.combatBookUsed;
+			}
+			set
+			{
+				this.combatBookUsed = value;
+			}
+		}
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public int TempLanternNightCooldown
+		{
+			get
+			{
+				return this.tempLanternNightCooldown;
+			}
+			set
+			{
+				this.tempLanternNightCooldown = value;
+			}
+		}
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public bool TempLanternNightGenuine
+		{
+			get
+			{
+				return this.tempLanternNightGenuine;
+			}
+			set
+			{
+				this.tempLanternNightGenuine = value;
+			}
+		}
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public bool TempLanternNightManual
+		{
+			get
+			{
+				return this.tempLanternNightManual;
+			}
+			set
+			{
+				this.tempLanternNightManual = value;
+			}
+		}
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public bool TempLanternNightNextNightIsGenuine
+		{
+			get
+			{
+				return this.tempLanternNightNextNightIsGenuine;
+			}
+			set
+			{
+				this.tempLanternNightNextNightIsGenuine = value;
+			}
+		}
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public int[] TreeTopVariations
+		{
+			get
+			{
+				return this.treeTopVariations;
+			}
+			set
+			{
+				this.treeTopVariations = value;
+			}
+		}
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public bool ForceHalloweenForToday
+		{
+			get
+			{
+				return this.forceHalloweenForToday;
+			}
+			set
+			{
+				this.forceHalloweenForToday = value;
+			}
+		}
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public bool ForceXMasForToday
+		{
+			get
+			{
+				return this.forceXMasForToday;
+			}
+			set
+			{
+				this.forceXMasForToday = value;
+			}
+		}
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public int SavedOreTiersCopper
+		{
+			get
+			{
+				return this.savedOreTiersCopper;
+			}
+			set
+			{
+				this.savedOreTiersCopper = value;
+			}
+		}
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public int SavedOreTiersIron
+		{
+			get
+			{
+				return this.savedOreTiersIron;
+			}
+			set
+			{
+				this.savedOreTiersIron = value;
+			}
+		}
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public int SavedOreTiersSilver
+		{
+			get
+			{
+				return this.savedOreTiersSilver;
+			}
+			set
+			{
+				this.savedOreTiersSilver = value;
+			}
+		}
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public int SavedOreTiersGold
+		{
+			get
+			{
+				return this.savedOreTiersGold;
+			}
+			set
+			{
+				this.savedOreTiersGold = value;
+			}
+		}
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public bool BoughtCat
+		{
+			get
+			{
+				return this.boughtCat;
+			}
+			set
+			{
+				this.boughtCat = value;
+			}
+		}
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public bool BoughtDog
+		{
+			get
+			{
+				return this.boughtDog;
+			}
+			set
+			{
+				this.boughtDog = value;
+			}
+		}
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public bool BoughtBunny
+		{
+			get
+			{
+				return this.boughtBunny;
+			}
+			set
+			{
+				this.boughtBunny = value;
+			}
+		}
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public bool DownedEmpressOfLight
+		{
+			get
+			{
+				return this.downedEmpressOfLight;
+			}
+			set
+			{
+				this.downedEmpressOfLight = value;
+			}
+		}
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public bool DownedQueenSlime
+		{
+			get
+			{
+				return this.downedQueenSlime;
+			}
+			set
+			{
+				this.downedQueenSlime = value;
+			}
+		}
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public bool DownedDeerclops
+		{
+			get
+			{
+				return this.downedDeerclops;
+			}
+			set
+			{
+				this.downedDeerclops = value;
+			}
+		}
+
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
 		public byte MoonType
 		{
 			get
@@ -269,175 +648,175 @@
 		}
 
 		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
-        public Point SpawnPoint
-        {
-            get
-            {
-                return this.spawnPoint;
-            }
-            set
-            {
-                this.spawnPoint = value;
-            }
-        }
+		public Point SpawnPoint
+		{
+			get
+			{
+				return this.spawnPoint;
+			}
+			set
+			{
+				this.spawnPoint = value;
+			}
+		}
 
-        [CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
-        public double SurfaceLevel
-        {
-            get
-            {
-                return this.surfaceLevel;
-            }
-            set
-            {
-                this.surfaceLevel = value;
-            }
-        }
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public double SurfaceLevel
+		{
+			get
+			{
+				return this.surfaceLevel;
+			}
+			set
+			{
+				this.surfaceLevel = value;
+			}
+		}
 
-        [CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
-        public double RockLayer
-        {
-            get
-            {
-                return this.rockLayer;
-            }
-            set
-            {
-                this.rockLayer = value;
-            }
-        }
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public double RockLayer
+		{
+			get
+			{
+				return this.rockLayer;
+			}
+			set
+			{
+				this.rockLayer = value;
+			}
+		}
 
-        [CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
-        public double TemporaryTime
-        {
-            get
-            {
-                return this.temporaryTime;
-            }
-            set
-            {
-                this.temporaryTime = value;
-            }
-        }
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public double TemporaryTime
+		{
+			get
+			{
+				return this.temporaryTime;
+			}
+			set
+			{
+				this.temporaryTime = value;
+			}
+		}
 
-        [CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
-        public bool IsDayTime
-        {
-            get
-            {
-                return this.isDayTime;
-            }
-            set
-            {
-                this.isDayTime = value;
-            }
-        }
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public bool IsDayTime
+		{
+			get
+			{
+				return this.isDayTime;
+			}
+			set
+			{
+				this.isDayTime = value;
+			}
+		}
 
-        [CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
-        public int MoonPhase
-        {
-            get
-            {
-                return this.moonPhase;
-            }
-            set
-            {
-                this.moonPhase = value;
-            }
-        }
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public int MoonPhase
+		{
+			get
+			{
+				return this.moonPhase;
+			}
+			set
+			{
+				this.moonPhase = value;
+			}
+		}
 
-        [CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
-        public bool IsBloodMoon
-        {
-            get
-            {
-                return this.isBloodMoon;
-            }
-            set
-            {
-                this.isBloodMoon = value;
-            }
-        }
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public bool IsBloodMoon
+		{
+			get
+			{
+				return this.isBloodMoon;
+			}
+			set
+			{
+				this.isBloodMoon = value;
+			}
+		}
 
-        [CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
-        public bool IsEclipse
-        {
-            get
-            {
-                return this.isEclipse;
-            }
-            set
-            {
-                this.isEclipse = value;
-            }
-        }
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public bool IsEclipse
+		{
+			get
+			{
+				return this.isEclipse;
+			}
+			set
+			{
+				this.isEclipse = value;
+			}
+		}
 
-        [CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
-        public Point DungeonPoint
-        {
-            get
-            {
-                return this.dungeonPoint;
-            }
-            set
-            {
-                this.dungeonPoint = value;
-            }
-        }
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		public Point DungeonPoint
+		{
+			get
+			{
+				return this.dungeonPoint;
+			}
+			set
+			{
+				this.dungeonPoint = value;
+			}
+		}
 
-        [CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
+		[CategoryAttribute("World Information"), ReadOnlyAttribute(true)]
 		public bool Crimson
-        {
-            get
-            {
+		{
+			get
+			{
 				return this.crimson;
-            }
-            set
-            {
+			}
+			set
+			{
 				this.crimson = value;
-            }
-        }
+			}
+		}
 
-        [CategoryAttribute("Boss Information"), ReadOnlyAttribute(true)]
-        public bool IsBoss1Dead
-        {
-            get
-            {
-                return this.isBoss1Dead;
-            }
-            set
-            {
-                this.isBoss1Dead = value;
-            }
-        }
+		[CategoryAttribute("Boss Information"), ReadOnlyAttribute(true)]
+		public bool IsBoss1Dead
+		{
+			get
+			{
+				return this.isBoss1Dead;
+			}
+			set
+			{
+				this.isBoss1Dead = value;
+			}
+		}
 
-        [CategoryAttribute("Boss Information"), ReadOnlyAttribute(true)]
-        public bool IsBoss2Dead
-        {
-            get
-            {
-                return this.isBoss2Dead;
-            }
-            set
-            {
-                this.isBoss2Dead = value;
-            }
-        }
+		[CategoryAttribute("Boss Information"), ReadOnlyAttribute(true)]
+		public bool IsBoss2Dead
+		{
+			get
+			{
+				return this.isBoss2Dead;
+			}
+			set
+			{
+				this.isBoss2Dead = value;
+			}
+		}
 
-        [CategoryAttribute("Boss Information"), ReadOnlyAttribute(true)]
-        public bool IsBoss3Dead
-        {
-            get
-            {
-                return this.isBoss3Dead;
-            }
-            set
-            {
-                this.isBoss3Dead = value;
-            }
-        }
+		[CategoryAttribute("Boss Information"), ReadOnlyAttribute(true)]
+		public bool IsBoss3Dead
+		{
+			get
+			{
+				return this.isBoss3Dead;
+			}
+			set
+			{
+				this.isBoss3Dead = value;
+			}
+		}
 
-        [CategoryAttribute("Boss Information"), ReadOnlyAttribute(true)]
+		[CategoryAttribute("Boss Information"), ReadOnlyAttribute(true)]
 		public bool IsQueenBeeDead
 		{
 			get
@@ -451,17 +830,17 @@
 		}
 
 		[CategoryAttribute("Boss Information"), ReadOnlyAttribute(true)]
-        public bool IsMechBoss1Dead
-        {
-            get
-            {
-                return this.isMechBoss1Dead;
-            }
-            set
-            {
-                this.isMechBoss1Dead = value;
-            }
-        }
+		public bool IsMechBoss1Dead
+		{
+			get
+			{
+				return this.isMechBoss1Dead;
+			}
+			set
+			{
+				this.isMechBoss1Dead = value;
+			}
+		}
 
 		[CategoryAttribute("Boss Information"), ReadOnlyAttribute(true)]
 		public bool IsMechBoss2Dead
@@ -595,18 +974,18 @@
 			}
 		}
 
-        [CategoryAttribute("Boss Information"), ReadOnlyAttribute(true)]
+		[CategoryAttribute("Boss Information"), ReadOnlyAttribute(true)]
 		public Boolean IsFrostDefeated
-        {
-            get
-            {
+		{
+			get
+			{
 				return this.isFrostDefeated;
-            }
-            set
-            {
+			}
+			set
+			{
 				this.isFrostDefeated = value;
-            }
-        }
+			}
+		}
 
 		[CategoryAttribute("Boss Information"), ReadOnlyAttribute(true)]
 		public Boolean IsPiratesDefeated
@@ -622,43 +1001,43 @@
 		}
 
 		[CategoryAttribute("Meteor Information"), ReadOnlyAttribute(true)]
-        public bool IsShadowOrbSmashed
-        {
-            get
-            {
-                return this.isShadowOrbSmashed;
-            }
-            set
-            {
-                this.isShadowOrbSmashed = value;
-            }
-        }
+		public bool IsShadowOrbSmashed
+		{
+			get
+			{
+				return this.isShadowOrbSmashed;
+			}
+			set
+			{
+				this.isShadowOrbSmashed = value;
+			}
+		}
 
-        [CategoryAttribute("Meteor Information"), ReadOnlyAttribute(true)]
-        public bool IsMeteorSpawned
-        {
-            get
-            {
-                return this.isMeteorSpawned;
-            }
-            set
-            {
-                this.isMeteorSpawned = value;
-            }
-        }
+		[CategoryAttribute("Meteor Information"), ReadOnlyAttribute(true)]
+		public bool IsMeteorSpawned
+		{
+			get
+			{
+				return this.isMeteorSpawned;
+			}
+			set
+			{
+				this.isMeteorSpawned = value;
+			}
+		}
 
-        [CategoryAttribute("Meteor Information"), ReadOnlyAttribute(true)]
-        public byte ShadowOrbsSmashed
-        {
-            get
-            {
-                return this.shadowOrbsSmashed;
-            }
-            set
-            {
-                this.shadowOrbsSmashed = value;
-            }
-        }
+		[CategoryAttribute("Meteor Information"), ReadOnlyAttribute(true)]
+		public byte ShadowOrbsSmashed
+		{
+			get
+			{
+				return this.shadowOrbsSmashed;
+			}
+			set
+			{
+				this.shadowOrbsSmashed = value;
+			}
+		}
 
 		[CategoryAttribute("Hard Mode Information"), ReadOnlyAttribute(true)]
 		public Int32 AltarsDestroyed
@@ -687,43 +1066,43 @@
 		}
 
 		[CategoryAttribute("Invasion Information"), ReadOnlyAttribute(true)]
-        public int InvasionDelay
-        {
-            get
-            {
-                return this.invasionDelay;
-            }
-            set
-            {
-                this.invasionDelay = value;
-            }
-        }
+		public int InvasionDelay
+		{
+			get
+			{
+				return this.invasionDelay;
+			}
+			set
+			{
+				this.invasionDelay = value;
+			}
+		}
 
-        [CategoryAttribute("Invasion Information"), ReadOnlyAttribute(true)]
-        public int InvasionSize
-        {
-            get
-            {
-                return this.invasionSize;
-            }
-            set
-            {
-                this.invasionSize = value;
-            }
-        }
+		[CategoryAttribute("Invasion Information"), ReadOnlyAttribute(true)]
+		public int InvasionSize
+		{
+			get
+			{
+				return this.invasionSize;
+			}
+			set
+			{
+				this.invasionSize = value;
+			}
+		}
 
-        [CategoryAttribute("Invasion Information"), ReadOnlyAttribute(true)]
-        public int InvasionType
-        {
-            get
-            {
-                return this.invasionType;
-            }
-            set
-            {
-                this.invasionType = value;
-            }
-        }
+		[CategoryAttribute("Invasion Information"), ReadOnlyAttribute(true)]
+		public int InvasionType
+		{
+			get
+			{
+				return this.invasionType;
+			}
+			set
+			{
+				this.invasionType = value;
+			}
+		}
 
 		[CategoryAttribute("Invasion Information"), ReadOnlyAttribute(true)]
 		public double InvasionPointX
@@ -883,10 +1262,12 @@
 		[CategoryAttribute("NPC Names"), ReadOnlyAttribute(true)]
 		public String MerchantsName
 		{
-			get {
+			get
+			{
 				return merchantsName;
 			}
-			set {
+			set
+			{
 				merchantsName = value;
 			}
 		}
@@ -894,10 +1275,12 @@
 		[CategoryAttribute("NPC Names"), ReadOnlyAttribute(true)]
 		public String NursesName
 		{
-			get {
+			get
+			{
 				return nursesName;
 			}
-			set {
+			set
+			{
 				nursesName = value;
 			}
 		}
@@ -905,10 +1288,12 @@
 		[CategoryAttribute("NPC Names"), ReadOnlyAttribute(true)]
 		public String ArmsDealersName
 		{
-			get {
+			get
+			{
 				return armsDealersName;
 			}
-			set {
+			set
+			{
 				armsDealersName = value;
 			}
 		}
@@ -916,10 +1301,12 @@
 		[CategoryAttribute("NPC Names"), ReadOnlyAttribute(true)]
 		public String DryadsName
 		{
-			get {
+			get
+			{
 				return dryadsName;
 			}
-			set {
+			set
+			{
 				dryadsName = value;
 			}
 		}
@@ -927,10 +1314,12 @@
 		[CategoryAttribute("NPC Names"), ReadOnlyAttribute(true)]
 		public String GuidesName
 		{
-			get {
+			get
+			{
 				return guidesName;
 			}
-			set {
+			set
+			{
 				guidesName = value;
 			}
 		}
@@ -938,10 +1327,12 @@
 		[CategoryAttribute("NPC Names"), ReadOnlyAttribute(true)]
 		public String ClothiersName
 		{
-			get {
+			get
+			{
 				return clothiersName;
 			}
-			set {
+			set
+			{
 				clothiersName = value;
 			}
 		}
@@ -949,10 +1340,12 @@
 		[CategoryAttribute("NPC Names"), ReadOnlyAttribute(true)]
 		public String DemolitionistsName
 		{
-			get {
+			get
+			{
 				return demolitionistsName;
 			}
-			set {
+			set
+			{
 				demolitionistsName = value;
 			}
 		}
@@ -960,10 +1353,12 @@
 		[CategoryAttribute("NPC Names"), ReadOnlyAttribute(true)]
 		public String TinkerersName
 		{
-			get {
+			get
+			{
 				return tinkerersName;
 			}
-			set {
+			set
+			{
 				tinkerersName = value;
 			}
 		}
@@ -971,10 +1366,12 @@
 		[CategoryAttribute("NPC Names"), ReadOnlyAttribute(true)]
 		public String WizardsName
 		{
-			get {
+			get
+			{
 				return wizardsName;
 			}
-			set {
+			set
+			{
 				wizardsName = value;
 			}
 		}
@@ -992,7 +1389,7 @@
 			}
 		}
 
-        [CategoryAttribute("NPC Names"), ReadOnlyAttribute(true)]
+		[CategoryAttribute("NPC Names"), ReadOnlyAttribute(true)]
 		public String TrufflesName
 		{
 			get
@@ -1096,18 +1493,18 @@
 			}
 		}
 
-        [CategoryAttribute("NPC Names"), ReadOnlyAttribute(true)]
-        public String StylistName
-        {
-            get
-            {
-                return stylistName;
-            }
-            set
-            {
-                stylistName = value;
-            }
-        }
+		[CategoryAttribute("NPC Names"), ReadOnlyAttribute(true)]
+		public String StylistName
+		{
+			get
+			{
+				return stylistName;
+			}
+			set
+			{
+				stylistName = value;
+			}
+		}
 
 
 	}
